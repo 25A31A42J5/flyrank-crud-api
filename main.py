@@ -138,5 +138,66 @@ def get_task(task_id: int):
             "done": bool(row["done"]),
         }
 
+# Create a new task in SQLite
+@app.post("/tasks", status_code=201)
+def create_task(new_task: TaskCreate):
+    with get_db_connection() as conn:
+        cursor = conn.execute(
+            "INSERT INTO tasks (title, done) VALUES (?, ?)",
+            (new_task.title, 0),
+        )
 
+        task_id = cursor.lastrowid
+
+        row = conn.execute(
+            "SELECT * FROM tasks WHERE id = ?",
+            (task_id,),
+        ).fetchone()
+
+        return {
+            "id": row["id"],
+            "title": row["title"],
+            "done": bool(row["done"]),
+        }
+# Update an existing task in SQLite
+@app.put("/tasks/{task_id}")
+def update_task(task_id: int, updated_task: TaskUpdate):
+    with get_db_connection() as conn:
+        cursor = conn.execute(
+            "UPDATE tasks SET title = ?, done = ? WHERE id = ?",
+            (updated_task.title, int(updated_task.done), task_id),
+        )
+
+        if cursor.rowcount == 0:
+            raise HTTPException(
+                status_code=404,
+                detail="Task not found",
+            )
+
+        row = conn.execute(
+            "SELECT * FROM tasks WHERE id = ?",
+            (task_id,),
+        ).fetchone()
+
+        return {
+            "id": row["id"],
+            "title": row["title"],
+            "done": bool(row["done"]),
+        }
+# Delete a task from SQLite
+@app.delete("/tasks/{task_id}", status_code=204)
+def delete_task(task_id: int):
+    with get_db_connection() as conn:
+        cursor = conn.execute(
+            "DELETE FROM tasks WHERE id = ?",
+            (task_id,),
+        )
+
+        if cursor.rowcount == 0:
+            raise HTTPException(
+                status_code=404,
+                detail="Task not found",
+            )
+
+    return None
 # Create, update, and delete will be connected in Stages 2 and 3.
