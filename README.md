@@ -177,11 +177,32 @@ Command-line example:
 curl -i http://127.0.0.1:8000/health
 ```
 
-Include the actual output from running this command in the project README before submission.
+### Sample Health Check Output
+
+Command:
+
+```powershell
+curl.exe -i http://127.0.0.1:8000/health
+```
+
+Response:
+
+```http
+HTTP/1.1 200 OK
+date: Tue, 20 Oct 2026 10:21:25 GMT
+server: uvicorn
+content-length: 20
+content-type: application/json
+
+{"status":"healthy"}```
 
 ## Project Repository
 
 GitHub: https://github.com/25A31A42J5/flyrank-crud-api
+
+## API Documentation Screenshot
+
+![Swagger UI showing the available API endpoints](docs/swagger-ui.png)
 
 ## Author
 
