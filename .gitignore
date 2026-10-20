@@ -4,11 +4,16 @@ __pycache__/
 
 # Virtual environment
 .venv/
+venv/
 
-# Environment variables
+# SQLite database (created automatically)
+tasks.db
+tasks.db-journal
+tasks.db-wal
+tasks.db-shm
+
+# Environment variables and secrets
 .env
 
-# Test and coverage files
-.pytest_cache/
-.coverage
-htmlcov/
+# Editor settings
+.vscode/
